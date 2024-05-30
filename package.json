@@ -1,0 +1,15 @@
+{
+    "name": "feather-funk",
+    "private": true,
+    "version": "0.1.0",
+    "description": "A complete Discord multiplayer activity for adventuring parties",
+    "main": "index.js",
+    "scripts": {
+      "dev": "pnpm run --filter \"./packages/**\" --parallel dev",
+      "start": "pnpm run --filter \"./packages/**\" --parallel start",
+      "tunnel": "cloudflared tunnel --url http://localhost:3000"
+    },
+    "author": "",
+    "license": "ISC"
+  }
+  
