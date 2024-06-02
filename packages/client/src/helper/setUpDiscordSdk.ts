@@ -2,6 +2,9 @@ import { discordSdk } from "../discordSdk";
 import { IGuildsMembersRead, TAuthenticateResponse } from "../types";
 import { getUserDisplayName } from "../utils/getUserDisplayName";
 import { getUserAvatarUrl } from "../utils/getUserAvatarUrl";
+import { Client } from "colyseus.js";
+import { State } from "../../../server/src/entities/State";
+import { GAME_NAME } from "../../../server/src/shared/Constants";
 
 export const setUpDiscordSdk = async () => {
     await discordSdk.ready();
@@ -67,15 +70,47 @@ export const setUpDiscordSdk = async () => {
 
 	
     // Done with discord-specific setup
-	const name = getUserDisplayName({
-		guildMember,
-		user: newAuth.user,
-	});
 
+	// Now we create a colyseus client
+	const wsUrl = `wss://${location.host}/api/colyseus`;
+	const client = new Client(wsUrl);
+
+	let roomName = 'Channel';
+
+	// Requesting the channel in GDMs (when the guild ID is null) requires
+	// the dm_channels.read scope which requires Discord approval.
+	if (discordSdk.channelId != null && discordSdk.guildId != null) {
+		// Over RPC collect info about the channel
+		const channel = await discordSdk.commands.getChannel({channel_id: discordSdk.channelId});
+		if (channel.name != null) {
+			roomName = channel.name;
+		}
+	}
+
+	// Get the user's guild-specific avatar uri
+	// If none, fall back to the user profile avatar
+	// If no main avatar, use a default avatar
 	const avatarUri = getUserAvatarUrl({
 		guildMember,
 		user: newAuth.user,
 	});
 
-	return {name, avatarUri}
+	// Get the user's guild nickname. If none set, fall back to global_name, or username
+	// Note - this name is note guaranteed to be unique
+	const name = getUserDisplayName({
+		guildMember,
+		user: newAuth.user,
+	});
+
+	// The second argument has to include for the room as well as the current player
+	const newRoom = await client.joinOrCreate<State>(GAME_NAME, {
+		channelId: discordSdk.channelId,
+		roomName,
+		userId: newAuth.user.id,
+		name,
+		avatarUri,
+	});
+
+	// Finally, we construct our authenticatedContext object to be consumed throughout the app
+	return { avatarUri, name, client, room: newRoom };
 }
