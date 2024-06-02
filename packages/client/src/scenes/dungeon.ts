@@ -15,14 +15,12 @@ export function createDungeonScene(k: KaboomCtx){
 		function updateLobby(){
 			k.destroyAll("existing-ui")
 
-			var s = "Dungeon!\nPlayers: "
 			room.state.players.forEach((player: Player, key: string) => {
-				s += player.name;
 				k.loadSprite("player", player.avatarUri)
 			})
 
 			k.add([
-				k.text(s),
+				k.text("Dungeon Time!"),
 				k.pos(k.center()),
 				k.anchor("center"),
 				"existing-ui"
@@ -33,7 +31,7 @@ export function createDungeonScene(k: KaboomCtx){
 				k.pos(k.center()),
 				k.anchor("center"),
 				k.rotate(0),
-				k.scale(.3)
+				k.scale(.2)
 			])
 			
 			k.onKeyDown("w", () => {
@@ -58,7 +56,7 @@ export function createDungeonScene(k: KaboomCtx){
 				k.camPos(player.worldPos());
 			}
 
-			k.camScale(new Vec2(1.5))
+			k.camScale(new Vec2(2))
 			k.camPos(player.worldPos());
 
 		}	
