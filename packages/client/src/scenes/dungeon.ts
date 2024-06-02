@@ -2,10 +2,10 @@ import kaboom, { KaboomCtx } from "kaboom"
 import "kaboom/global"
 
 export function createDungeonScene(k: KaboomCtx){
-	k.scene("dungeon", () => {
+	k.scene("dungeon", (name: String) => {
 
 		k.add([
-            k.text("Dungeon!"),
+            k.text("Dungeon!\nHello "+ name + "!"),
             k.pos(k.center()),
             k.anchor("center")
         ])

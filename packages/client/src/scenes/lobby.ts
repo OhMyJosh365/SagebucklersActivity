@@ -33,9 +33,5 @@ export function createLoobyScene(k: KaboomCtx){
 			player.pos.x += 2;
 		})
 		
-		// add a kaboom on mouse click
-		k.onClick(() => {
-			k.go("dungeon")
-		})
 	});
 }
