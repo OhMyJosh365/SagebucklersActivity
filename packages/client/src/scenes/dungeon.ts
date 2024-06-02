@@ -7,58 +7,68 @@ import "kaboom/global"
 export function createDungeonScene(k: KaboomCtx){
 	k.scene("dungeon", (room: Room<State>) => {
 
-		updateLobby();
-		const stateChangeController = room.onStateChange((state) => {
-            updateLobby();
-        });
-
-		function updateLobby(){
-			k.destroyAll("existing-ui")
-
-			room.state.players.forEach((player: Player, key: string) => {
-				k.loadSprite("player", player.avatarUri)
-			})
-
-			k.add([
-				k.text("Dungeon Time!"),
-				k.pos(k.center()),
-				k.anchor("center"),
-				"existing-ui"
-			])
-
-			const player = k.add([
-				k.sprite("player"),
-				k.pos(k.center()),
-				k.anchor("center"),
-				k.rotate(0),
-				k.scale(.2)
-			])
-			
-			k.onKeyDown("w", () => {
-				onMovement(0, -2)
-			})
-			
-			k.onKeyDown("s", () => {
-				onMovement(0, 2)
-			})
-			
-			k.onKeyDown("a", () => {
-				onMovement(-2, 0)
-			})
-			
-			k.onKeyDown("d", () => {
-				onMovement(2, 0)
-			})
-
-			function onMovement(x: number, y: number){
-				player.pos.x += x;
-				player.pos.y += y;
-				k.camPos(player.worldPos());
+		const lvl = [
+			"  =====",
+			"      =",
+			"=     =",
+			"=   ===",
+			"=     =",
+			"=     =",
+			"======="
+		]
+		addLevel(lvl, {
+			tileWidth: 64, 
+			tileHeight: 64,
+			pos: k.center(),
+			tiles: {
+				"=": () => [
+				k.sprite("bean"),
+				k.area(),
+				k.body({ isStatic: true}),
+				"wall"
+				]
 			}
+		})
 
-			k.camScale(new Vec2(2))
+		const player = k.add([
+			k.sprite("player"),
+			k.pos(k.center()),
+			k.anchor("center"),
+			k.rotate(0),
+			k.area(),
+			k.body({isStatic: true}),
+			k.scale(.2),
+			"player"
+		])
+		
+		k.onKeyDown("w", () => {
+			onMovement(0, -2)
+		})
+		
+		k.onKeyDown("s", () => {
+			onMovement(0, 2)
+		})
+		
+		k.onKeyDown("a", () => {
+			onMovement(-2, 0)
+		})
+		
+		k.onKeyDown("d", () => {
+			onMovement(2, 0)
+		})
+
+		player.onCollideUpdate("wall", (w) => {
+			destroy(w);
+		})
+
+		function onMovement(x: number, y: number){
+			player.pos.x += x;
+			player.pos.y += y;
 			k.camPos(player.worldPos());
+		}
 
-		}	
+		k.camScale(new Vec2(2))
+		k.camPos(player.worldPos());
+	
 	})
 }

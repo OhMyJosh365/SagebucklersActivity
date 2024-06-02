@@ -9,7 +9,7 @@ export const k = kaboom({
 	background: "000000"
 })
 
-k.loadSprite("player", "src/sprites/bean.png")
+k.loadSprite("bean", "src/sprites/bean.png")
 
 console.log("Instance Created!")
 
