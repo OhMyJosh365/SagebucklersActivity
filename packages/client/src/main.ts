@@ -16,6 +16,6 @@ console.log("Instance Created!")
 createDungeonScene(k)
 createLoobyScene(k)
 
-setUpDiscordSdk().then(({name}) => {
-	k.go("dungeon", name)
+setUpDiscordSdk().then(({name, avatarUri}) => {
+	k.go("dungeon", name, avatarUri)
 })

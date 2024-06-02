@@ -2,7 +2,9 @@ import kaboom, { KaboomCtx } from "kaboom"
 import "kaboom/global"
 
 export function createDungeonScene(k: KaboomCtx){
-	k.scene("dungeon", (name: String) => {
+	k.scene("dungeon", (name: String, avatarUri: String) => {
+
+		k.loadSprite("player", avatarUri)
 
 		k.add([
             k.text("Dungeon!\nHello "+ name + "!"),

@@ -1,6 +1,7 @@
 import { discordSdk } from "../discordSdk";
 import { IGuildsMembersRead, TAuthenticateResponse } from "../types";
 import { getUserDisplayName } from "../utils/getUserDisplayName";
+import { getUserAvatarUrl } from "../utils/getUserAvatarUrl";
 
 export const setUpDiscordSdk = async () => {
     await discordSdk.ready();
@@ -64,11 +65,17 @@ export const setUpDiscordSdk = async () => {
             return null;
         });
 
+	
     // Done with discord-specific setup
 	const name = getUserDisplayName({
 		guildMember,
 		user: newAuth.user,
 	});
 
-	return {name}
+	const avatarUri = getUserAvatarUrl({
+		guildMember,
+		user: newAuth.user,
+	});
+
+	return {name, avatarUri}
 }
