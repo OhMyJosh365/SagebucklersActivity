@@ -2,6 +2,7 @@ import kaboom from "kaboom"
 import "kaboom/global"
 import { createDungeonScene } from "./scenes/dungeon"
 import { createLoobyScene } from "./scenes/lobby"
+import { setUpDiscordSdk } from "./helper/setUpDiscordSdk"
 
 // initialize context
 export const k = kaboom({
@@ -15,4 +16,6 @@ console.log("Instance Created!")
 createDungeonScene(k)
 createLoobyScene(k)
 
-k.go("dungeon")
+setUpDiscordSdk().then(() => {
+	k.go("dungeon")
+})
