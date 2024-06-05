@@ -24,7 +24,7 @@ export function createDungeonScene(k: KaboomCtx){
 				"=": () => [
 				k.sprite("bean"),
 				k.area(),
-				k.body({ isStatic: true}),
+				k.body({isStatic: true}),
 				"wall"
 				]
 			}
@@ -36,7 +36,7 @@ export function createDungeonScene(k: KaboomCtx){
 			k.anchor("center"),
 			k.rotate(0),
 			k.area(),
-			k.body({isStatic: true}),
+			k.body(),
 			k.scale(.2),
 			"player"
 		])
@@ -58,7 +58,7 @@ export function createDungeonScene(k: KaboomCtx){
 		})
 
 		player.onCollideUpdate("wall", (w) => {
-			destroy(w);
+			
 		})
 
 		function onMovement(x: number, y: number){
